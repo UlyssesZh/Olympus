@@ -876,7 +876,7 @@ local function buildPresetsUI()
         uie.paneled.row({
             uie.button(lang.get("edit_modpresets_txt"), function()
                 local root = config.installs[config.install].path
-                utils.openFile(fs.joinpath(root, lang.get("mods"), "modpresets.txt"))
+                utils.openFile(fs.joinpath(root, "Mods", "modpresets.txt"))
             end),
             uie.row({
                 presetField,
