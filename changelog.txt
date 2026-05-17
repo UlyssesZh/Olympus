@@ -3,5 +3,4 @@ and only contains the latest changes.
 Its purpose is to be shown in Olympus when updating.
 
 #changelog#
-∙ Fixed crash when fetching Everest versions fails when checking for updates in the background
-∙ Fixed crash on startup when a version of Everest compiled from source is installed
+∙ Point more explicitly to log.txt and log-sharp.txt in instructions to ask for help with crashes

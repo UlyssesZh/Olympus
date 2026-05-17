@@ -211,8 +211,8 @@ Some of the possible reasons why this might be happening:
     open_log_folder = [[Open log folder]],
     you_can_ask_for_help_in_the_celeste_disc = [[You can ask for help in the Celeste Discord server.
 An invite can be found on the Everest website.
-Please drag and drop your log files into the #modding_help channel.
-Before uploading, check your logs for sensitive info (f.e. your username).]],
+Please drag and drop log.txt and log-sharp.txt into the #modding_help channel.
+Before uploading, check your logs for sensitive info (like your username).]],
 
     -- scenes/installmanager.lua
     install_manager = [[Install Manager]],
@@ -623,7 +623,7 @@ Quelques exemples de situations où des problèmes réseau peuvent se produire :
     open_log_folder = [[Ouvrir le dossier des logs]],
     you_can_ask_for_help_in_the_celeste_disc = [[Tu peux demander de l'aide sur le serveur Discord Celeste (en anglais).
 Le lien d'invitation est sur le site d'Everest.
-Pense bien à joindre tes fichiers de log dans le canal #modding_help.
+Pense bien à joindre log.txt et log-sharp.txt dans le canal #modding_help.
 Avant de les envoyer, vérifie qu'ils ne contiennent pas d'info sensible,
 comme ton nom d'utilisateur.]],
 
