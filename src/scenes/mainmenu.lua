@@ -42,10 +42,11 @@ end
 
 
 local function buttonBig(icon, text, scene, forceInstall)
+    local labelY = config.language == "ko" and 14 or 11
     return uie.button(
         uie.row({
             uie.icon(icon):with({ scale = 48 / 256 }),
-            uie.label(text, ui.fontBig):with({ x = -4, y = 11 }):as("bigButtonLabel")
+            uie.label(text, ui.fontBig):with({ x = -4, y = labelY }):as("bigButtonLabel")
         }):with({ style = { spacing = 16 } }),
         type(scene) == "function" and scene or function()
             if checkInstall(forceInstall) then
@@ -786,3 +787,4 @@ end
 
 
 return scene
+    
