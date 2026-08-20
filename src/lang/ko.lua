@@ -99,7 +99,7 @@ Lutris 또는 유사한 도구를 사용 중이라면 별도로 해결해야 합
 보이지 않는다면 아직 시작 중일 수 있습니다]],
     do_you_want_to_launch_another_instance_a = [[.
 그래도 다른 인스턴스를 실행하시겠습니까?]],
-    opening = [[여는 중 ]],
+    opening = [[여는 중]],
 
     -- scenes/everest.lua
     everest_installer = [[Everest 설치 관리자]],
