@@ -120,7 +120,7 @@ end
 local function getOpeningText(path)
     local opening = require("lang").get("opening")
     if require("config").language == "ko" then
-        return path .. " " .. opening:gsub("%s+$", "")
+        return path .. " " .. opening
     end
     return opening .. path
 end
