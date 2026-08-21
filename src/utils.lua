@@ -117,8 +117,16 @@ function utils.fromURLComponent(value)
     return value and value:gsub("+", " "):gsub("%%(%x%x)", function(c) return string.char(tonumber(c, 16)) end)
 end
 
+local function getOpeningText(path)
+    local opening = require("lang").get("opening")
+    if require("config").language == "ko" then
+        return path .. " " .. opening
+    end
+    return opening .. path
+end
+
 function utils.openURL(path)
-    require("notify")(require("lang").get("opening") .. path)
+    require("notify")(getOpeningText(path))
     return loveSystemAsync.openURL(path)
 end
 
@@ -127,7 +135,7 @@ function utils.promptForFile(...)
 end
 
 function utils.openFile(path)
-    require("notify")(require("lang").get("opening") .. path)
+    require("notify")(getOpeningText(path))
     return loveSystemAsync.openURL("file://" .. fs.fslash(path))
 end
 

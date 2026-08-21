@@ -89,7 +89,7 @@ local root = uie.column({
                     scene.loadPage(scene.page - 1)
                 end):as("pagePrev"),
                 uie.label(lang.get("page"), ui.fontBig):with({
-                    y = 4
+                    y = config.language == "ko" and 9 or 4
                 }):as("pageLabel"),
                 uie.button(uie.icon("forward"):with({ scale = 24 / 256 }), function()
                     scene.loadPage(scene.page + 1)

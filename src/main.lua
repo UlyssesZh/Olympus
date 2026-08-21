@@ -171,7 +171,10 @@ function makeFontWithFallbacks(withRenogare, size)
     table.insert(fonts, 2, "data/fonts/NotoSans-Regular.ttf")
 
     if withRenogare then
-        table.insert(fonts, 1, "data/fonts/Renogare-Regular.otf")
+        local renogareFont = config and config.language == "ko"
+            and "data/fonts/Renogare_KR.ttf"
+            or "data/fonts/Renogare-Regular.otf"
+        table.insert(fonts, 1, renogareFont)
     end
 
     log.debug("Making font with size", size, "and fallback order", utils.toJSON(fonts, { indent = false }))

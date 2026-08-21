@@ -5,7 +5,8 @@ local utils = require('utils')
 local langs = {
     en = require("lang/en"),
     fr = require("lang/fr"),
-    zh = require("lang/zh")
+    zh = require("lang/zh"),
+    ko = require("lang/ko")
 }
 
 local function get(key)

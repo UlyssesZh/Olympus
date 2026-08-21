@@ -116,6 +116,7 @@ local languages = {
     { text = "English (Default)", data = "en" },
     { text = "Français (French)", data = "fr" },
     { text = "简体中文（Simplified Chinese)", data = "zh" },
+    { text = "한국어 (Korean)", data = "ko" },
 }
 
 
