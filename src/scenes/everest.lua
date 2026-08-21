@@ -123,7 +123,9 @@ local root = uie.column({
                                     end }
                                 }
                             })
-                        elseif not install.versionEverest and fs.isFile(install.entry.path .. "/Celeste.dll") then
+                        -- residual files are only an issue with legacy builds of Everest
+                        elseif not install.versionEverest and fs.isFile(install.entry.path .. "/Celeste.dll") and
+                        version ~= "manual" and not version.isNative then
                             alert({
                                 body = lang.get("residual_files_from_a_net_core_build_hav"),
                                 buttons = {
