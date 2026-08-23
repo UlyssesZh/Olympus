@@ -306,7 +306,7 @@ Celeste 설치 관리자로 이동하시겠습니까?]],
     -- scenes/modlist.lua
     mod_manager = [[모드 관리자]],
     no1 = [[아니요]],
-    s_enabled_s = [[%s 활성화됨 %s]],
+    s_enabled_s = [[%s %s 활성화됨]],
     mod = [[모드]],
     mods = [[모드]],
     no_mod_info_available = [[(모드 정보 없음)]],
@@ -361,7 +361,7 @@ Celeste 설치 관리자로 이동하시겠습니까?]],
     questionmark = [[?]],
 
     -- scenes/options.lua
-    random_default = [[무작위 (기본값)]],
+    random_default = [[랜덤 (기본값)]],
     background = [[배경 #]],
     high_default = [[높음 (기본값)]],
     medium = [[중간]],
@@ -398,9 +398,9 @@ Celeste 설치 관리자로 이동하시겠습니까?]],
     api_mirror = [[API 미러]],
     image_mirror = [[이미지 미러]],
     this_is_your_current_theme_the_quick_bro = [[현재 사용 중인 테마입니다.
-다람쥐 헌 쳇바퀴에 타고파]],
+다람쥐 헌 쳇바퀴에 타고파.]],
     this_is_the_new_theme_over_the_lazy_dog = [[새로 적용할 테마입니다.
-키스의 고유 조건은 입술끼리 만나야 하고 특별한 기술은 필요치 않다.]],
+동녘 구름 틈새로 퍼지는 햇빛.]],
     if_you_have_difficulty_downloading_mods_ = [[모드 다운로드가 어렵거나 Olympus의 일부 항목이 불러와지지 않는다면 다음 설정을 시도해 볼 수 있습니다.
 - ]],
     can_help_if_mod_downloads_are_slow_or_ga = [[ 모드 다운로드가 느리거나 GameBanana에 문제가 있을 때 도움이 될 수 있습니다.
