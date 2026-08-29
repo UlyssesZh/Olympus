@@ -95,10 +95,11 @@ local closeAfterOneClickInstallOptions = {
 
 -- Keep in sync with https://github.com/EverestAPI/Everest/blob/dev/Celeste.Mod.mm/Mod/Core/CoreModuleSettings.cs :: CreateMirrorPreferencesEntry
 local mirrorPreferences = {
-    { text = lang.get("disabled_default"), data = "gb,jade,otobot,wegfan" },
-    { text = lang.get("germany_0x0a_de"), data = "jade,otobot,wegfan,gb" },
-    { text = lang.get("china_weg_fan"), data = "wegfan,otobot,jade,gb" },
-    { text = lang.get("n_america_celestemods_com"), data = "otobot,jade,wegfan,gb" }
+    { text = lang.get("disabled_default"), data = "gb,jade,risingsunlight,otobot,wegfan" },
+    { text = lang.get("germany_0x0a_de"), data = "jade,risingsunlight,otobot,wegfan,gb" },
+    { text = lang.get("china_weg_fan"), data = "wegfan,otobot,jade,risingsunlight,gb" },
+    { text = lang.get("n_america_celestemods_com"), data = "otobot,jade,risingsunlight,wegfan,gb" },
+    { text = lang.get("france_risingsunlight"), data = "risingsunlight,jade,otobot,wegfan,gb" },
 }
 
 local apiMirrors = {

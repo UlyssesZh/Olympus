@@ -6,9 +6,9 @@ using System.IO.Compression;
 using System.Text.RegularExpressions;
 
 namespace Olympus {
-    public partial class CmdInstallMod : Cmd<string, string, string, IEnumerator> {
+    public partial class CmdInstallMod : Cmd<string, string, string, string, IEnumerator> {
 
-        public override IEnumerator Run(string root, string url, string mirrorPreferences) {
+        public override IEnumerator Run(string root, string url, string mirrorName, string mirrorPreferences) {
             string mods = Path.Combine(root, "Mods");
             if (!Directory.Exists(mods))
                 Directory.CreateDirectory(mods);
@@ -33,7 +33,7 @@ namespace Olympus {
 
                     Exception[] ea = new Exception[1];
 
-                    foreach (string mirroredUrl in CmdUpdateAllMods.GetAllMirrorUrls(url, mirrorPreferences)) {
+                    foreach (string mirroredUrl in CmdUpdateAllMods.GetAllMirrorUrls(url, mirrorName, mirrorPreferences)) {
                         yield return Status($"Downloading mod from {mirroredUrl}", false, "download", false);
                         ea = new Exception[1];
                         using (FileStream zipStream = File.Open(from, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite | FileShare.Delete))

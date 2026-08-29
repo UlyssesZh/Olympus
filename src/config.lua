@@ -1,6 +1,7 @@
 local fs = require("fs")
 local utils = require("utils")
 local finder = require("finder")
+local log = require("logger")("config")
 
 local configData = {}
 
@@ -135,13 +136,24 @@ function config.load()
     default(data, "updateModsOnStartup", "none")
     default(data, "useOpenGL", "disabled")
 
-    default(data, "mirrorPreferences", "gb,jade,otobot,wegfan")
+    default(data, "mirrorPreferences", "gb,jade,risingsunlight,otobot,wegfan")
     default(data, "apiMirror", false)
     default(data, "imageMirror", "jade") -- jade, otobot or none
 
     default(data, "closeAfterOneClickInstall", "disabled")
 
     default(data, "language", "en")
+
+    local migratedMirrorValue = ({
+        ['gb,jade,otobot,wegfan'] = 'gb,jade,risingsunlight,otobot,wegfan',
+        ['jade,otobot,wegfan,gb'] = 'jade,risingsunlight,otobot,wegfan,gb',
+        ['wegfan,otobot,jade,gb'] = 'wegfan,otobot,jade,risingsunlight,gb',
+        ['otobot,jade,wegfan,gb'] = 'otobot,jade,risingsunlight,wegfan,gb'
+    })[data.mirrorPreferences]
+    if migratedMirrorValue then
+        log.info("Migrating mirror preferences from", data.mirrorPreferences, "to", migratedMirrorValue)
+        data.mirrorPreferences = migratedMirrorValue
+    end
 end
 
 function config.save()

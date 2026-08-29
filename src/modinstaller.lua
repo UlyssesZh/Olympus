@@ -60,15 +60,9 @@ function modinstaller.register()
 end
 
 
-function modinstaller.install(modurl, cb, autoclose)
+function modinstaller.install(modurl, mirrorName, cb, autoclose)
     local install = config.installs[config.install]
     install = install and install.path
-
-    modurl = modurl and modurl:match("^(https://gamebanana.com/mmdl/.*),.*,.*$") or modurl
-
-    if not install or not modurl then
-        return
-    end
 
     if not cb then
         cb = function(launch)
@@ -84,7 +78,7 @@ function modinstaller.install(modurl, cb, autoclose)
     local installer = scener.push("installer")
     installer.update(string.format(lang.get("preparing_installation_of_s"), modname), false, "")
 
-    installer.sharpTask("installMod", install, modurl, config.mirrorPreferences):calls(function(task, last)
+    installer.sharpTask("installMod", install, modurl, mirrorName or "", config.mirrorPreferences):calls(function(task, last)
         if not last then
             return
         end

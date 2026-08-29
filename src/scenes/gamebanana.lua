@@ -636,7 +636,7 @@ function scene.item(info)
                                     btns[i] = uie[i == 1 and "buttonGreen" or "button"](
                                         { { 1, 1, 1, 1 }, file.Name, { 1, 1, 1, 0.5 }, " ∙ " .. os.date(lang.get("y_m_d_h_m_s"), file.CreatedDate) .. " ∙ " .. uiu.countformat(file.Downloads, lang.get("d_download"), lang.get("d_downloads")), { 1, 1, 1, 0.5 }, "\n" .. file.Description},
                                         function(self)
-                                            modinstaller.install(file.URL)
+                                            modinstaller.install(file.URL, file.MirrorName)
                                             self:getParent("container"):close(lang.get("ok"))
                                         end
                                     )

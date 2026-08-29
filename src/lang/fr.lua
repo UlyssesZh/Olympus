@@ -378,6 +378,7 @@ Astuce : Si tu désactives le mod, Everest ne le chargera pas, ce qui est tout a
     germany_0x0a_de = [[Allemagne (0x0a.de)]],
     china_weg_fan = [[Chine (weg.fan)]],
     n_america_celestemods_com = [[Am. du Nord (celestemods.com)]],
+    france_risingsunlight = [[France (risingsunlight.dev)]],
     _x0a_de_default = [[0x0a.de (défaut)]],
     celestemods_com = [[celestemods.com]],
     disabled = [[Désactivé]],

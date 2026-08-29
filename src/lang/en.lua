@@ -375,6 +375,7 @@ Tip: Disabling the mod prevents Everest from loading it, and is as efficient as 
     germany_0x0a_de = [[Germany (0x0a.de)]],
     china_weg_fan = [[China (weg.fan)]],
     n_america_celestemods_com = [[N. America (celestemods.com)]],
+    france_risingsunlight = [[France (risingsunlight.dev)]],
     _x0a_de_default = [[0x0a.de (Default)]],
     celestemods_com = [[celestemods.com]],
     disabled = [[Disabled]],

@@ -69,22 +69,11 @@ namespace Olympus {
             }
         }
 
-        internal static IEnumerable GetAllMirrorUrls(string url, string mirrorPreferences) {
-            return new EnumeratorEnumerator { Enumerator = getAllMirrorUrls(url, mirrorPreferences) };
-        }
-
         // Make sure to keep this in sync with
         // - https://github.com/EverestAPI/Everest/blob/dev/Celeste.Mod.mm/Mod/Helpers/ModUpdaterHelper.cs :: getAllMirrorUrls
         // - https://github.com/maddie480/RandomStuffWebsite/blob/main/front-vue/src/components/ModListItem.vue :: getMirrorLink
-        private static IEnumerator<string> getAllMirrorUrls(string url, string mirrorPreferences) {
-            uint gbid = 0;
-            if ((url.StartsWith("http://gamebanana.com/dl/") && !uint.TryParse(url.Substring("http://gamebanana.com/dl/".Length), out gbid)) ||
-                (url.StartsWith("https://gamebanana.com/dl/") && !uint.TryParse(url.Substring("https://gamebanana.com/dl/".Length), out gbid)) ||
-                (url.StartsWith("http://gamebanana.com/mmdl/") && !uint.TryParse(url.Substring("http://gamebanana.com/mmdl/".Length), out gbid)) ||
-                (url.StartsWith("https://gamebanana.com/mmdl/") && !uint.TryParse(url.Substring("https://gamebanana.com/mmdl/".Length), out gbid)))
-                gbid = 0;
-
-            if (gbid == 0) {
+        internal static IEnumerable<string> GetAllMirrorUrls(string url, string mirrorName, string mirrorPreferences) {
+            if (mirrorName == "") {
                 yield return url;
                 yield break;
             }
@@ -96,15 +85,19 @@ namespace Olympus {
                         break;
 
                     case "jade":
-                        yield return $"https://celestemodupdater.0x0a.de/banana-mirror/{gbid}.zip";
+                        yield return $"https://celestemodupdater.0x0a.de/banana-mirror/{mirrorName}.zip";
                         break;
 
                     case "wegfan":
-                        yield return $"https://celeste.weg.fan/api/v2/download/gamebanana-files/{gbid}";
+                        yield return $"https://celeste.weg.fan/api/v2/download/gamebanana-files/{mirrorName}";
                         break;
 
                     case "otobot":
-                        yield return $"https://banana-mirror-mods.celestemods.com/{gbid}.zip";
+                        yield return $"https://banana-mirror-mods.celestemods.com/{mirrorName}.zip";
+                        break;
+
+                    case "risingsunlight":
+                        yield return $"https://library.risingsunlight.dev/celeste/mods/{mirrorName}.zip";
                         break;
                 }
             }
@@ -113,7 +106,7 @@ namespace Olympus {
         private static IEnumerator tryDownloadWithMirror(ModUpdateInfo info, string messagePrefix, string destination, string mirrorPreferences) {
             Exception lastException = null;
 
-            foreach (string url in GetAllMirrorUrls(info.URL, mirrorPreferences)) {
+            foreach (string url in GetAllMirrorUrls(info.URL, info.MirrorName, mirrorPreferences)) {
                 log.Info($"Downloading mod from {url}");
                 lastException = null;
 
@@ -172,6 +165,7 @@ namespace Olympus {
             public string URL { get; set; }
             public List<string> xxHash { get; set; }
             public int Size { get; set; }
+            public string MirrorName { get; set; }
         }
 
         // Why do you need to tell C# how to get an enumerator from an enumerator
@@ -200,7 +194,8 @@ namespace Olympus {
                             Name = name,
                             URL = updateCatalog[name].URL,
                             Size = updateCatalog[name].Size,
-                            xxHash = updateCatalog[name].xxHash
+                            xxHash = updateCatalog[name].xxHash,
+                            MirrorName = updateCatalog[name].MirrorName
                         };
                     }
                     log.Debug($"Downloaded {updateCatalog.Count} item(s)");
