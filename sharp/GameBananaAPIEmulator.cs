@@ -27,18 +27,21 @@ namespace Olympus {
         }
     }
 
-    public class CmdEmulatedModList : Cmd<string, int, string, int?, int?, string> {
-        public override string Run(string sort, int page, string type, int? category, int? subcategory) {
-            // is there a type and/or a category filter?
+    public class CmdEmulatedModList : Cmd<string, int, string, string, string> {
+        public override string Run(string sort, int page, string category, string subcategory) {
+            // is there a category filter?
             List<Predicate<Dictionary<string, object>>> typeFilters = new List<Predicate<Dictionary<string, object>>>();
-            if (type != null) {
-                typeFilters.Add(info => type.Equals(info["GameBananaType"]));
-            }
             if (category != null) {
-                typeFilters.Add(info => category == int.Parse((string) info["CategoryId"]));
+                typeFilters.Add(info => {
+                    Dictionary<object, object> itemCategory = (Dictionary<object, object>) info["Category"];
+                    while (itemCategory.TryGetValue("Parent", out object parent)) {
+                        itemCategory = (Dictionary<object, object>) parent;
+                    }
+                    return category == (string) itemCategory["ID"];
+                });
             }
             if (subcategory != null) {
-                typeFilters.Add(info => info.ContainsKey("SubcategoryId") && subcategory == int.Parse((string) info["SubcategoryId"]));
+                typeFilters.Add(info => subcategory == (string) ((Dictionary<object, object>) info["Category"])["ID"]);
             }
             // typeFilter is a && of all typeFilters
             Predicate<Dictionary<string, object>> typeFilter = info => typeFilters.All(filter => filter(info));

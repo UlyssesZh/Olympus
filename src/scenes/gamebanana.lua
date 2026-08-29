@@ -10,7 +10,7 @@ local lang = require("lang")
 local scene = {
     name = lang.get("gamebanana"),
     sort = "latest",
-    itemtypeFilter = {}
+    categoryFilter = {}
 }
 
 local sortOptions = {
@@ -21,7 +21,7 @@ local sortOptions = {
 }
 
 -- this will be the type filter dropdown content until the type list is loaded through the API.
-local itemtypeOptionsTemp = {
+local categoryOptionsTemp = {
     { text = lang.get("all"), data = "" }
 }
 
@@ -137,14 +137,14 @@ local root = uie.column({
                 ):as("sort"),
 
                 uie.dropdownWithSubmenu(
-                    itemtypeOptionsTemp,
+                    categoryOptionsTemp,
                     function(self, value)
-                        if value ~= scene.itemtypeFilter then
-                            scene.itemtypeFilter = value
+                        if value ~= scene.categoryFilter then
+                            scene.categoryFilter = value
                             scene.loadPage(1)
                         end
                     end
-                ):as("itemtypeFilter"),
+                ):as("categoryFilter"),
 
                 uie.field(
                     "",
@@ -212,7 +212,7 @@ function scene.loadPage(page)
     end
 
     scene.loadingPage = threader.routine(function()
-        local lists, pagePrev, pageLabel, pageNext, sortDropdown, itemtypeFilterDropdown = root:findChild("modColumns", "pagePrev", "pageLabel", "pageNext", "sort", "itemtypeFilter")
+        local lists, pagePrev, pageLabel, pageNext, sortDropdown, categoryFilterDropdown = root:findChild("modColumns", "pagePrev", "pageLabel", "pageNext", "sort", "categoryFilter")
 
         local errorPrev = root:findChild("error")
         if errorPrev then
@@ -234,12 +234,12 @@ function scene.loadPage(page)
         pageNext.enabled = false
         sortDropdown.enabled = false
         sortDropdown.visible = not isQuery
-        itemtypeFilterDropdown.enabled = false
-        itemtypeFilterDropdown.visible = not isQuery
+        categoryFilterDropdown.enabled = false
+        categoryFilterDropdown.visible = not isQuery
         pagePrev:reflow()
         pageNext:reflow()
         sortDropdown:reflow()
-        itemtypeFilterDropdown:reflow()
+        categoryFilterDropdown:reflow()
 
         if not isQuery then
             if page == 0 then
@@ -270,7 +270,7 @@ function scene.loadPage(page)
             if page == 0 then
                 entries, entriesError = scene.downloadFeaturedEntries()
             else
-                entries, entriesError = scene.downloadSortedEntries(page, scene.sort, scene.itemtypeFilter)
+                entries, entriesError = scene.downloadSortedEntries(page, scene.sort, scene.categoryFilter)
             end
         else
             entries, entriesError = scene.downloadSearchEntries(page)
@@ -278,8 +278,8 @@ function scene.loadPage(page)
 
         -- 1/ the previous page button is disabled if there is a search (search does not have pagination)
         -- 2/ if a filter is active, the first page is 1
-        -- 3/ if no filter is active (itemtypeFilter is an empty table), the first page is 0 (featured entries)
-        local hasPreviousPage = not isQuery and page > 0 and ((scene.sort == "latest" and next(scene.itemtypeFilter) == nil) or page > 1)
+        -- 3/ if no filter is active (categoryFilter is an empty table), the first page is 0 (featured entries)
+        local hasPreviousPage = not isQuery and page > 0 and ((scene.sort == "latest" and next(scene.categoryFilter) == nil) or page > 1)
 
         if not entries then
             loading:removeSelf()
@@ -293,11 +293,11 @@ function scene.loadPage(page)
             pagePrev.enabled = hasPreviousPage
             pageNext.enabled = not isQuery
             sortDropdown.enabled = not isQuery
-            itemtypeFilterDropdown.enabled = not isQuery
+            categoryFilterDropdown.enabled = not isQuery
             pagePrev:reflow()
             pageNext:reflow()
             sortDropdown:reflow()
-            itemtypeFilterDropdown:reflow()
+            categoryFilterDropdown:reflow()
             return
         end
 
@@ -311,11 +311,11 @@ function scene.loadPage(page)
         pagePrev.enabled = hasPreviousPage
         pageNext.enabled = not isQuery
         sortDropdown.enabled = not isQuery
-        itemtypeFilterDropdown.enabled = not isQuery
+        categoryFilterDropdown.enabled = not isQuery
         pagePrev:reflow()
         pageNext:reflow()
         sortDropdown:reflow()
-        itemtypeFilterDropdown:reflow()
+        categoryFilterDropdown:reflow()
     end)
     return scene.loadingPage
 end
@@ -341,9 +341,12 @@ local function refreshSubcategories(categoryData)
     end
 
     for _, category in ipairs(categoryData) do
-        if category.data.itemtype then
-            -- the API has subcategories for all categories, by itemtype and categoryid
-            local data = fullData[category.data.itemtype]["" .. (category.data.categoryid or 0)]
+        if category.data.categoryid then
+            -- the API has subcategories for all categories, by categoryid
+            local data
+            for _, onlyEntry in pairs(fullData) do
+                data = onlyEntry[category.data.categoryid]
+            end
 
             if #data > 1 then
                 -- Convert the list retrieved from the API to a dropdown option list, and assign it to the category as a submenu
@@ -352,11 +355,10 @@ local function refreshSubcategories(categoryData)
                     table.insert(allTypes, {
                         -- The text includes the count, except for the "All" option
                         text = subcategory.name .. (subcategory.id and " (" .. subcategory.count .. ")" or ""),
-                        -- The subcategory id is used as a category filter instead if the parent category only filters on itemtype
+                        -- The subcategory id is used as a category filter instead if the parent category only filters on category
                         data = {
-                            itemtype = category.data.itemtype,
-                            categoryid = category.data.categoryid and category.data.categoryid or subcategory.id,
-                            subcategoryid = category.data.categoryid and subcategory.id
+                            categoryid = category.data.categoryid,
+                            subcategoryid = subcategory.id
                         },
                         -- If selecting the "All" option, the dropdown should use the category's label instead
                         dropdownText = not subcategory.id and category.text
@@ -397,7 +399,6 @@ function scene.load()
                 table.insert(allTypes, {
                     text = category.formatted .. " (" .. category.count .. ")",
                     data = {
-                        itemtype = category.itemtype,
                         categoryid = category.categoryid
                     }
                 })
@@ -409,11 +410,11 @@ function scene.load()
             end
 
             -- Refresh the dropdown
-            local itemtypeFilterDropdown = scene.root:findChild("itemtypeFilter")
-            itemtypeFilterDropdown._itemsCache = {}
-            itemtypeFilterDropdown.data = allTypes
-            itemtypeFilterDropdown:setSelected(itemtypeFilterDropdown:getItem(1))
-            itemtypeFilterDropdown:reflow()
+            local categoryFilterDropdown = scene.root:findChild("categoryFilter")
+            categoryFilterDropdown._itemsCache = {}
+            categoryFilterDropdown.data = allTypes
+            categoryFilterDropdown:setSelected(categoryFilterDropdown:getItem(1))
+            categoryFilterDropdown:reflow()
         end
     end)
 
@@ -465,18 +466,15 @@ function scene.downloadSearchEntries(query)
     return data, msg
 end
 
-function scene.downloadSortedEntries(page, sort, itemtypeFilter)
+function scene.downloadSortedEntries(page, sort, categoryFilter)
     local url = string.format("https://maddie480.ovh/celeste/gamebanana-list?page=%s&sort=%s", page, sort)
 
     -- apply optional filters
-    if itemtypeFilter.itemtype then
-        url = url .. "&type=" .. itemtypeFilter.itemtype
+    if categoryFilter.categoryid then
+        url = url .. "&category=" .. categoryFilter.categoryid
     end
-    if itemtypeFilter.categoryid then
-        url = url .. "&category=" .. itemtypeFilter.categoryid
-    end
-    if itemtypeFilter.subcategoryid then
-        url = url .. "&subcategory=" .. itemtypeFilter.subcategoryid
+    if categoryFilter.subcategoryid then
+        url = url .. "&subcategory=" .. categoryFilter.subcategoryid
     end
 
     local data = scene.cache[url]
@@ -487,7 +485,7 @@ function scene.downloadSortedEntries(page, sort, itemtypeFilter)
     local msg
 
     if config.apiMirror then
-        data = sharp.emulatedModList(sort, page, itemtypeFilter.itemtype, itemtypeFilter.categoryid, itemtypeFilter.subcategoryid):result()
+        data = sharp.emulatedModList(sort, page, categoryFilter.categoryid, categoryFilter.subcategoryid):result()
         data, msg = utils.fromJSON(data)
     else
         data, msg = threader.wrap("utils").downloadJSON(url):result()
