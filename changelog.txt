@@ -3,5 +3,4 @@ and only contains the latest changes.
 Its purpose is to be shown in Olympus when updating.
 
 #changelog#
-∙ Cleaner mirror fallback mechanics following the mod updater refactor
-∙ Added a new mirror: France (risingsunlight.dev)
+∙ Fixed 1-click install links
