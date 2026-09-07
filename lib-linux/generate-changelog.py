@@ -1,19 +1,22 @@
 import re
 import sys
+from xml.sax.saxutils import escape
+
 
 def extract_changelog(changelog_path="changelog.txt"):
-    with open(changelog_path, 'r') as f:
+    with open(changelog_path, "r") as f:
         lines = f.readlines()
 
     changelog_lines = []
     in_changelog = False
     for line in lines:
-        if line.strip() == '#changelog#':
+        if line.strip() == "#changelog#":
             in_changelog = True
             continue
         if in_changelog and line.strip():
             # Clean the list
-            cleaned = re.sub(r'^[∙•\-*\s]+', '', line).strip()
+            # Escape &, < and > with the xml python util
+            cleaned = escape(re.sub(r"^[∙•\-*\s]+", "", line).strip())
             changelog_lines.append(cleaned)
 
     # Add <li> and <ul> with correct indentation (pretty ugly)
@@ -21,18 +24,20 @@ def extract_changelog(changelog_path="changelog.txt"):
     xml = "\n".join(xml_lines)
     return f"        <ul>\n{xml}\n        </ul>"
 
+
 def update_metainfo(target, changelog_html):
-    with open(target, 'r') as f:
+    with open(target, "r") as f:
         content = f.read()
 
     # Replace only the exact placeholder line
     updated = content.replace(
-        '<description>BUILD_CHANGELOG</description>',
-        f'<description>\n{changelog_html}\n      </description>'
+        "<description>BUILD_CHANGELOG</description>",
+        f"<description>\n{changelog_html}\n      </description>",
     )
 
-    with open(target, 'w') as f:
+    with open(target, "w") as f:
         f.write(updated)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

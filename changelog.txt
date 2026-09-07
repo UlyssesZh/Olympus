@@ -9,3 +9,4 @@ Its purpose is to be shown in Olympus when updating.
 ∙ Made the download animation fill in linearly as the download progresses
 ∙ Cleaner mirror fallback mechanics & Fixes to the mod browser following the mod updater refactor
 ∙ Added a new mirror: France (risingsunlight.dev)
+∙ Fix linux changelog script
